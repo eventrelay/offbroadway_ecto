@@ -22,13 +22,16 @@ defmodule OffBroadwayEcto.Producer do
         [:broadway, :producer, :module]
       )
 
+    {client, client_options} = get_client_with_options(opts[:client])
+
     {:producer,
      %{
        demand: opts[:demand] || 0,
        receive_timer: nil,
        receive_interval: receive_interval,
        force_interval: force_interval,
-       client: opts[:client],
+       client: client,
+       client_options: client_options,
        ack_ref: client_opts[:ack_ref]
      }}
   end
@@ -58,6 +61,9 @@ defmodule OffBroadwayEcto.Producer do
         {[], broadway_opts_with_defaults}
     end
   end
+
+  defp get_client_with_options({client, opts}), do: {client, opts}
+  defp get_client_with_options(client), do: {client, []}
 
   defp format_error(%ValidationError{keys_path: [], message: message}) do
     "invalid configuration given to OffBroadwayEcto.prepare_for_start/2, " <> message
