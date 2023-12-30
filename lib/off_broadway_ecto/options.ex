@@ -24,6 +24,12 @@ defmodule OffBroadwayEcto.Options do
         messages.
         """
       ],
+      client_options: [
+        doc: """
+        A user defined data structure that will be passed to the client callbacks
+        """,
+        default: %{}
+      ],
       demand: [
         doc: """
         Base number of records fetched from the database.
