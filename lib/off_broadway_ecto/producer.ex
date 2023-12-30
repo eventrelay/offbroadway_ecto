@@ -22,7 +22,13 @@ defmodule OffBroadwayEcto.Producer do
         [:broadway, :producer, :module]
       )
 
+    ack_ref = client_opts[:ack_ref]
+
     {client, client_options} = get_client_with_options(opts[:client])
+
+    :persistent_term.put(ack_ref, %{
+      client: client
+    })
 
     {:producer,
      %{
@@ -32,7 +38,7 @@ defmodule OffBroadwayEcto.Producer do
        force_interval: force_interval,
        client: client,
        client_options: client_options,
-       ack_ref: client_opts[:ack_ref]
+       ack_ref: ack_ref
      }}
   end
 
@@ -46,10 +52,6 @@ defmodule OffBroadwayEcto.Producer do
 
       {:ok, opts} ->
         ack_ref = broadway_opts[:name]
-
-        :persistent_term.put(ack_ref, %{
-          client: opts[:client]
-        })
 
         broadway_opts_with_defaults =
           put_in(
