@@ -27,7 +27,8 @@ defmodule OffBroadwayEcto.Producer do
     {client, client_options} = get_client_with_options(opts[:client])
 
     :persistent_term.put(ack_ref, %{
-      client: client
+      client: client,
+      client_options: client_options
     })
 
     args = %{
