@@ -30,16 +30,21 @@ defmodule OffBroadwayEcto.Producer do
       client: client
     })
 
-    {:producer,
-     %{
-       demand: opts[:demand] || 0,
-       receive_timer: nil,
-       receive_interval: receive_interval,
-       force_interval: force_interval,
-       client: client,
-       client_options: client_options,
-       ack_ref: ack_ref
-     }}
+    args = %{
+      demand: opts[:demand] || 0,
+      receive_timer: nil,
+      receive_interval: receive_interval,
+      force_interval: force_interval,
+      client: client,
+      client_options: client_options,
+      ack_ref: ack_ref
+    }
+
+    if function_exported?(client, :prepare_for_start, 1) do
+      client.prepare_for_start(args)
+    end
+
+    {:producer, args}
   end
 
   @impl Broadway.Producer
