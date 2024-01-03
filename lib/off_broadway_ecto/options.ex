@@ -1,7 +1,7 @@
 defmodule OffBroadwayEcto.Options do
   def definition() do
     [
-      receive_interval: [
+      pull_interval: [
         type: :non_neg_integer,
         doc: """
         The duration (in milliseconds) for which the producer

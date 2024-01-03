@@ -13,7 +13,7 @@ defmodule OffBroadwayEcto.Producer do
 
   @impl true
   def init(opts) do
-    receive_interval = opts[:receive_interval]
+    pull_interval = opts[:pull_interval]
     force_interval = opts[:force_interval]
 
     {_client, client_opts} =
@@ -34,7 +34,7 @@ defmodule OffBroadwayEcto.Producer do
     args = %{
       demand: opts[:demand] || 0,
       receive_timer: nil,
-      receive_interval: receive_interval,
+      pull_interval: pull_interval,
       force_interval: force_interval,
       client: client,
       client_options: client_options,
@@ -111,14 +111,14 @@ defmodule OffBroadwayEcto.Producer do
 
     interval =
       if force_interval do
-        state.receive_interval
+        state.pull_interval
       else
         0
       end
 
     receive_timer =
       case {messages, new_demand} do
-        {[], _} -> schedule_receive_messages(state.receive_interval)
+        {[], _} -> schedule_receive_messages(state.pull_interval)
         {_, 0} -> nil
         _ -> schedule_receive_messages(interval)
       end

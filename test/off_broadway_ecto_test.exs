@@ -33,6 +33,10 @@ defmodule OffBroadwayEctoTest do
       |> limit(^demand)
     end
 
+    def prepare_for_start(_opts) do
+      :ok
+    end
+
     def receive_messages(demand, _opts) do
       {_count, jobs} =
         OffBroadwayEcto.Image
@@ -103,7 +107,7 @@ defmodule OffBroadwayEctoTest do
       Forwarder,
       build_broadway_opts(broadway_name, opts,
         client: {TestClient, a: 1},
-        # receive_interval: 1000,
+        # pull_interval: 1000,
         test_pid: self()
       )
     )
